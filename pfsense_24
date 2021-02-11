@@ -1,0 +1,51 @@
+{
+  "extractors": [
+    {
+      "title": "pfSense filterlog: IPv4 TCP",
+      "extractor_type": "regex",
+      "converters": [
+        {
+          "type": "csv",
+          "config": {
+            "trim_leading_whitespace": false,
+            "column_header": "RuleNumber,SubRuleNumber,Anchor,Tracker,Interface,Reason,Action,Direction,IPVersion,TOS,ECN,TTL,ID,Offset,Flags,ProtocolID,Protocol,Length,SourceIP,DestIP,SourcePort,DestPort,DataLength,TCPFlags,Sequence,ACK,Window,URG,Options",
+            "strict_quotes": false
+          }
+        }
+      ],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "FilterData",
+      "extractor_config": {
+        "regex_value": "^.*filterlog:(.*)$"
+      },
+      "condition_type": "regex",
+      "condition_value": "^.*filterlog:(.*),(in|out),4,.*,tcp,.*$"
+    },
+    {
+      "title": "pfSense filterlog: IPv4 UDP",
+      "extractor_type": "regex",
+      "converters": [
+        {
+          "type": "csv",
+          "config": {
+            "trim_leading_whitespace": false,
+            "column_header": "RuleNumber,SubRuleNumber,Anchor,Tracker,Interface,Reason,Action,Direction,IPVersion,TOS,ECN,TTL,ID,Offset,Flags,ProtocolID,Protocol,Length,SourceIP,DestIP,SourcePort,DestPort,DataLength",
+            "strict_quotes": false
+          }
+        }
+      ],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "FilterData",
+      "extractor_config": {
+        "regex_value": "^.*filterlog:(.*)$"
+      },
+      "condition_type": "regex",
+      "condition_value": "^.*filterlog:(.*),(in|out),4,.*,udp,.*$"
+    }
+  ],
+  "version": "4.0.2"
+}
