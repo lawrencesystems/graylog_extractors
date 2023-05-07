@@ -1,0 +1,94 @@
+{
+  "extractors": [
+    {
+      "title": "pfSense filterlog: IPv4 ICMP",
+      "extractor_type": "regex",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "FilterData",
+      "extractor_config": {
+        "regex_value": "^filterlog\\[.+\\]:(.+)"
+      },
+      "condition_type": "regex",
+      "condition_value": "^filterlog\\[.+\\]:(.+),(in|out),4,.*,icmp,.*$"
+    },
+    {
+      "title": "pfSense filterlog: IPv4 UDP",
+      "extractor_type": "regex",
+      "converters": [
+        {
+          "type": "csv",
+          "config": {
+            "trim_leading_whitespace": false,
+            "column_header": "RuleNumber,SubRuleNumber,Anchor,Tracker,Interface,Reason,Action,Direction,IPVersion,TOS,ECN,TTL,ID,Offset,Flags,ProtocolID,Protocol,Length,SourceIP,DestIP,SourcePort,DestPort,DataLength",
+            "strict_quotes": false
+          }
+        }
+      ],
+      "order": 2,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "FilterData",
+      "extractor_config": {
+        "regex_value": "^filterlog\\[.+\\]:(.+)"
+      },
+      "condition_type": "regex",
+      "condition_value": "^filterlog\\[.+\\]:(.+),(in|out),4,.*,udp,.*$"
+    },
+    {
+      "title": "pfSense filterlog: IPv4 TCP",
+      "extractor_type": "regex",
+      "converters": [
+        {
+          "type": "csv",
+          "config": {
+            "trim_leading_whitespace": false,
+            "column_header": "RuleNumber,SubRuleNumber,Anchor,Tracker,Interface,Reason,Action,Direction,IPVersion,TOS,ECN,TTL,ID,Offset,Flags,ProtocolID,Protocol,Length,SourceIP,DestIP,SourcePort,DestPort,DataLength,TCPFlags,Sequence,ACK,Window,URG,Options",
+            "strict_quotes": false
+          }
+        }
+      ],
+      "order": 1,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "FilterData",
+      "extractor_config": {
+        "regex_value": "^filterlog\\[.+\\]:(.+)"
+      },
+      "condition_type": "regex",
+      "condition_value": "^filterlog\\[.+\\]:(.+),(in|out),4,.*,tcp,.*$"
+    },
+    {
+      "title": "pfsense OpenVPN",
+      "extractor_type": "grok",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "",
+      "extractor_config": {
+        "grok_pattern": "^openvpn\\[%{NUMBER:openvpn_pid}\\]: %{IP:client_ip}:%{NUMBER:client_port} \\[%{DATA:client_username}\\] Peer Connection Initiated with \\[AF_INET\\]%{IP:target_ip}:%{NUMBER:target_port} \\(via \\[AF_INET\\]%{IP:via_ip}%\\)",
+        "named_captures_only": true
+      },
+      "condition_type": "string",
+      "condition_value": "openvpn"
+    },
+    {
+      "title": "Suricata alerts",
+      "extractor_type": "grok",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "",
+      "extractor_config": {
+        "grok_pattern": "%{DATA:process}\\[%{INT:process_id}\\]: \\[%{INT:rule_id}:%{INT:rev_id}:%{INT:sig_id}\\] %{DATA:alert_msg} \\[Classification: %{DATA:classification}\\] \\[Priority: %{INT:priority}\\] \\{%{WORD:protocol}\\} %{IP:src_ip}:%{INT:src_port} -> %{IP:dst_ip}:%{INT:dst_port}"
+      },
+      "condition_type": "string",
+      "condition_value": "suricata"
+    }
+  ],
+  "version": "5.0.7"
+}
