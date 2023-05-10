@@ -1,0 +1,38 @@
+{
+  "extractors": [
+    {
+      "title": "Unifi AP JSON data",
+      "extractor_type": "json",
+      "converters": [],
+      "order": 1,
+      "cursor_strategy": "copy",
+      "source_field": "json_data",
+      "target_field": "",
+      "extractor_config": {
+        "list_separator": ", ",
+        "kv_separator": "=",
+        "key_prefix": "",
+        "key_separator": "_",
+        "replace_key_whitespace": false,
+        "key_whitespace_replacement": "_"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    },
+    {
+      "title": "UniFi AP",
+      "extractor_type": "grok",
+      "converters": [],
+      "order": 0,
+      "cursor_strategy": "copy",
+      "source_field": "message",
+      "target_field": "",
+      "extractor_config": {
+        "grok_pattern": "%{DATA:access_point} %{DATA:unifi_device_mac_address},%{DATA:ap_model}: %{DATA:stahtd}: %{DATA:stahtd_process}\\[%{INT:stahtd_id}\\]: %{DATA:stahtd_event}: %{GREEDYDATA:json_data}"
+      },
+      "condition_type": "none",
+      "condition_value": ""
+    }
+  ],
+  "version": "5.0.7"
+}
