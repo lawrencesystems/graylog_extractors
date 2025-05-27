@@ -23,7 +23,7 @@
       "source_field": "message",
       "target_field": "unifi_fw",
       "extractor_config": {
-        "grok_pattern": "%{DATA:device_name} \\[%{DATA:fw_rule_id}\\] DESCR=\\\"\\[%{DATA:fw_rule_group}\\]%{DATA:fw_rule_name}\\\" IN=%{DATA:fw_in_iface} OUT=%{DATA:fw_out_iface} MAC=%{DATA:fw_mac} SRC=%{IP:src_ip} DST=%{IP:dst_ip} LEN=%{INT:ip_len} TOS=%{DATA:tos} PREC=%{DATA:prec} TTL=%{INT:ttl} ID=%{INT:packet_id} DF PROTO=%{WORD:proto}(?: SPT=%{INT:src_port})?(?: DPT=%{INT:dst_port})?(?: SEQ=%{INT:seq})?(?: ACK=%{INT:ack})?(?: WINDOW=%{INT:window})?(?: SYN)?(?: URGP=%{INT:urgp})?(?: UID=%{INT:uid})?(?: GID=%{INT:gid})?(?: LEN=%{INT:payload_len})? MARK=%{DATA:fw_mark}"
+        "grok_pattern": "%{DATA:device_name} \\[%{DATA:fw_rule_id}\\] DESCR=\\\"(?:(?:\\[%{DATA:fw_rule_group}\\])?%{DATA:fw_rule_name}|%{DATA:fw_description})\\\" IN=%{DATA:fw_in_iface} OUT=%{DATA:fw_out_iface}(?: MAC=%{DATA:fw_mac})? SRC=%{IPORHOST:src_ip} DST=%{IPORHOST:dst_ip} LEN=%{INT:ip_len}(?: TOS=%{DATA:tos})?(?: PREC=%{DATA:prec})?(?: TTL=%{INT:ttl})?(?: ID=%{INT:packet_id})?(?: DF)?(?: TC=%{INT:tc})?(?: HOPLIMIT=%{INT:hop_limit})?(?: FLOWLBL=%{INT:flow_label})? PROTO=%{WORD:proto}(?: TYPE=%{INT:icmp_type})?(?: CODE=%{INT:icmp_code})?(?: ID=%{INT:icmp_id})?(?: SPT=%{INT:src_port})?(?: DPT=%{INT:dst_port})?(?: LEN=%{INT:payload_len})?(?: SEQ=%{INT:seq})?(?: ACK=%{INT:ack})?(?: WINDOW=%{INT:window})?(?: SYN)?(?: ACK)?(?: RST)?(?: FIN)?(?: PSH)?(?: URG)?(?: ECE)?(?: CWR)?(?: URGP=%{INT:urgp})?(?: UID=%{INT:uid})?(?: GID=%{INT:gid})? MARK=%{GREEDYDATA:fw_mark}"
       },
       "condition_type": "regex",
       "condition_value": "\\[.*\\] DESCR="
